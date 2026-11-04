@@ -16,11 +16,15 @@
       `<span class="arr" aria-hidden="true"><svg class="a1"><use href="#arrow"/></svg><svg class="a2"><use href="#arrow"/></svg></span>`;
   });
 
-  /* ---------- Marquee contínuo: duplica o grupo ---------- */
+  /* ---------- Marquee contínuo: 4 cópias idênticas para loop infinito sem espaço em branco ou corte ---------- */
   $$('[data-marquee]').forEach((track) => {
     const g = $('[data-marquee-group]', track);
-    const clone = g.cloneNode(true); clone.setAttribute('aria-hidden', 'true');
-    track.appendChild(clone);
+    if (!g) return;
+    for (let i = 0; i < 3; i++) {
+      const clone = g.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      track.appendChild(clone);
+    }
   });
 
   /* ---------- Roadmap (desktop em escada + lista no mobile) ---------- */
@@ -382,7 +386,7 @@
   $$('.logo-anim circle', loader).forEach((c, i) => c.style.setProperty('--d', `${600 + i * 45}ms`));
   requestAnimationFrame(() => requestAnimationFrame(() => loader.classList.add('go')));
 
-  const count = $('#ld-count'), prog = $('#ld-prog'), phrase = $('#ld-phrase'), label = $('#ld-label'), win = $('#ld-win');
+  const count = $('#ld-count'), prog = $('#ld-prog'), phrase = $('#ld-phrase'), label = $('#ld-label');
   const MIN = 2000, MAX = 6500, t0 = performance.now();
   let loaded = document.readyState === 'complete', shown = 0, current = phrase.textContent, done = false;
   window.addEventListener('load', () => { loaded = true; });
@@ -403,26 +407,15 @@
     count.textContent = String(n).padStart(3, '0');
     prog.style.width = `${shown}%`;
     setPhrase(n < 40 ? 'Respire fundo.' : n < 96 ? 'Preparando um espaço seguro para você.' : 'Bem-vindo.');
-    if (n >= 100 && !done) { done = true; label.textContent = 'Pronto'; setTimeout(reveal, 350); return; }
+    if (n >= 100 && !done) { done = true; label.textContent = 'Pronto'; setTimeout(reveal, 300); return; }
     requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
 
   function reveal() {
-    const top = window.innerHeight / 2 - 120;
-    const m = Math.max(16, (window.innerWidth - 1200) / 2);
-    win.style.transition = 'none';
-    win.style.clipPath = `inset(${top}px ${m}px ${top}px ${m}px round 6px)`;
-    win.classList.add('on');
-    loader.classList.add('light');
-    win.getBoundingClientRect();
-    win.style.transition = '';
-    requestAnimationFrame(() => { win.style.clipPath = 'inset(0px 0px 0px 0px round 0px)'; });
     try { sessionStorage.setItem('at-intro', '1'); } catch (e) { /* ignore */ }
-    setTimeout(() => {
-      loader.classList.add('out');
-      startPage();
-      setTimeout(() => loader.remove(), 800);
-    }, 1150);
+    loader.classList.add('out');
+    startPage();
+    setTimeout(() => loader.remove(), 750);
   }
 })();

@@ -100,10 +100,15 @@
     .ui-shadow { box-shadow: 0 14px 36px rgba(0,0,0,.14); }
 
     /* ---------- Marquee ---------- */
-    .marquee { mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); }
-    .marquee-track { display: flex; width: max-content; animation: marquee 42s linear infinite; }
+    .marquee { mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+    .marquee-track { display: flex; width: max-content; will-change: transform; animation: marquee 28s linear infinite; }
+    .marquee-group { display: flex; align-items: center; gap: 3.5rem; padding-right: 3.5rem; flex-shrink: 0; white-space: nowrap; }
+    .marquee-group > span { flex-shrink: 0; white-space: nowrap; }
     .marquee:hover .marquee-track { animation-play-state: paused; }
-    @keyframes marquee { to { transform: translateX(-50%); } }
+    @keyframes marquee {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(-25%, 0, 0); }
+    }
 
     /* ---------- O que muda: foco no scroll ---------- */
     .bf-row { opacity: 0; transform: translate3d(0, 16px, 0); transition: opacity .65s var(--ease), transform .65s var(--ease); transition-delay: calc(120ms + var(--i, 0) * 70ms); }
@@ -173,11 +178,8 @@
     .ld-name { opacity: 0; filter: blur(8px); transform: translateY(6px); transition: all .8s var(--ease) .9s; }
     #loader.go .ld-name { opacity: 1; filter: none; transform: none; }
     .ld-phrase { transition: opacity .35s ease; }
-    #ld-win { position: fixed; inset: 0; z-index: 3; opacity: 0; transition: clip-path 1s cubic-bezier(.76,0,.24,1), opacity .3s ease; }
-    #ld-win.on { opacity: 1; }
-    #loader.light .ld-center { color: #fff; }
-    #loader.light .ld-center .ld-name { text-shadow: 0 2px 18px rgba(6,27,49,.35); }
-    .ld-center { color: #061B31; z-index: 4; transition: color .4s ease; }
+    .ld-center { color: #061B31; z-index: 4; transition: color .4s ease, transform .6s var(--ease), opacity .5s ease; }
+    #loader.out .ld-center { transform: translateY(-10px); opacity: 0; }
     .ld-meta > * { z-index: 4; }
 
     @media (prefers-reduced-motion: reduce) {
@@ -217,7 +219,6 @@
     <i class="mark tl"></i><i class="mark tr"></i><i class="mark bl"></i><i class="mark br"></i>
     <div id="ld-prog" class="absolute left-0 bottom-0 h-[2px] bg-ink" style="width:0%"></div>
   </div>
-  <div id="ld-win" class="ph" style="background-image:linear-gradient(rgba(6,27,49,.35),rgba(6,27,49,.35)),url('img/1.png'),linear-gradient(135deg,#d9cfbf,#8e9a8b)"></div>
   <div class="ld-center absolute left-0 right-0 flex flex-col items-center justify-center gap-3" style="top:calc(50% - 120px);height:240px">
     <div class="flex items-center gap-4">
       <span class="w-[46px] sm:w-[54px]"><svg class="logo-anim" viewBox="6 6 424 404" aria-hidden="true"><g class="la-lines" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" fill="none"><line x1="75" y1="67" x2="235" y2="24" pathLength="1"/><line x1="235" y1="24" x2="402" y2="109" pathLength="1"/><line x1="402" y1="109" x2="408" y2="188" pathLength="1"/><line x1="408" y1="188" x2="363" y2="319" pathLength="1"/><line x1="363" y1="319" x2="283" y2="348" pathLength="1"/><line x1="230" y1="324" x2="283" y2="348" pathLength="1"/><line x1="230" y1="324" x2="248" y2="390" pathLength="1"/><line x1="248" y1="390" x2="283" y2="348" pathLength="1"/><line x1="75" y1="67" x2="26" y2="155" pathLength="1"/><line x1="26" y1="155" x2="100" y2="238" pathLength="1"/><line x1="100" y1="238" x2="177" y2="256" pathLength="1"/><line x1="100" y1="238" x2="183" y2="195" pathLength="1"/><line x1="26" y1="155" x2="188" y2="146" pathLength="1"/><line x1="75" y1="67" x2="188" y2="146" pathLength="1"/><line x1="188" y1="146" x2="277" y2="143" pathLength="1"/><line x1="188" y1="146" x2="183" y2="195" pathLength="1"/><line x1="183" y1="195" x2="177" y2="256" pathLength="1"/><line x1="235" y1="24" x2="277" y2="143" pathLength="1"/><line x1="277" y1="143" x2="402" y2="109" pathLength="1"/><line x1="277" y1="143" x2="408" y2="188" pathLength="1"/><line x1="277" y1="143" x2="289" y2="229" pathLength="1"/><line x1="177" y1="256" x2="289" y2="229" pathLength="1"/><line x1="177" y1="256" x2="230" y2="324" pathLength="1"/><line x1="289" y1="229" x2="230" y2="324" pathLength="1"/><line x1="289" y1="229" x2="283" y2="348" pathLength="1"/><line x1="289" y1="229" x2="363" y2="319" pathLength="1"/></g><g class="la-dots" fill="currentColor"><circle cx="277" cy="143" r="19"/><circle cx="235" cy="24" r="15"/><circle cx="75" cy="67" r="15"/><circle cx="26" cy="155" r="15"/><circle cx="402" cy="109" r="14"/><circle cx="408" cy="188" r="15"/><circle cx="100" cy="238" r="14"/><circle cx="230" cy="324" r="14"/><circle cx="363" cy="319" r="15"/><circle cx="188" cy="146" r="13"/><circle cx="183" cy="195" r="13"/><circle cx="177" cy="256" r="11"/><circle cx="289" cy="229" r="13"/><circle cx="283" cy="348" r="12"/></g></svg></span>
@@ -317,7 +318,7 @@
     <span class="eyebrow !text-[12px] text-muted">Temas que trabalhamos juntos</span>
     <div class="marquee w-full overflow-hidden">
       <div class="marquee-track" data-marquee>
-        <div class="flex items-center gap-14 pr-14 text-[22px]" data-marquee-group>
+        <div class="marquee-group text-[22px]" data-marquee-group>
           <span class="flex items-center gap-2.5 h-serif opacity-60"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A8C85" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>Autoconhecimento</span>
           <span class="flex items-center gap-2.5 h-serif opacity-60"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A8C85" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>Adolescentes</span>
           <span class="flex items-center gap-2.5 h-serif opacity-60"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A8C85" stroke-width="1.6"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Gestão emocional</span>
