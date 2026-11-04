@@ -32,14 +32,18 @@
   </script>
 
   <style>
-    :root { --ease: cubic-bezier(.22,1,.36,1); --m: max(16px, calc((100vw - 1200px) / 2)); }
-    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    :root {
+      --ease: cubic-bezier(.16, 1, .3, 1);
+      --ease-out: cubic-bezier(.22, 1, .36, 1);
+      --m: max(16px, calc((100vw - 1200px) / 2));
+    }
+    html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
     body.loading { overflow: hidden; }
     .h-serif { font-family: "Faculty Glyphic", Georgia, serif; letter-spacing: -0.045em; font-weight: 400; }
     .eyebrow { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
 
     /* ---------- Botões com rolagem (estilo Framer) ---------- */
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px 10px 16px; border-radius: 4px; font: 500 14px/18px Inter, sans-serif; box-shadow: 0 1px 2px rgba(0,0,0,.12); transition: background-color .4s var(--ease); white-space: nowrap; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px 10px 16px; border-radius: 4px; font: 500 14px/18px Inter, sans-serif; box-shadow: 0 1px 2px rgba(0,0,0,.12); transition: background-color .4s var(--ease), transform .4s var(--ease); white-space: nowrap; }
     .btn-navy { background: #061B31; color: #fff; }
     .btn-navy:hover { background: #0F2B4A; }
     .btn-white { background: #fff; color: #061B31; }
@@ -54,32 +58,44 @@
     .btn:hover .arr .a1, .btn:focus-visible .arr .a1 { transform: translate(100%, -100%); }
     .btn:hover .arr .a2, .btn:focus-visible .arr .a2 { transform: translate(0, 0); }
 
-    /* ---------- Revelações no scroll ---------- */
-    .rv { opacity: 0; transform: translateY(14px); filter: blur(6px); transition: opacity .9s var(--ease), transform .9s var(--ease), filter .9s var(--ease); transition-delay: var(--d, 0ms); }
-    .rv.in { opacity: 1; transform: none; filter: none; }
-    .word { display: inline-block; opacity: 0; transform: translateY(16px); filter: blur(8px); transition: opacity .7s var(--ease), transform .7s var(--ease), filter .7s var(--ease); transition-delay: var(--d, 0ms); }
-    .words-in .word { opacity: 1; transform: none; filter: none; }
+    /* ---------- Revelações no scroll (alinhadas por seção) ---------- */
+    .rv { opacity: 0; transform: translate3d(0, 22px, 0); filter: blur(5px); transition: opacity .8s var(--ease), transform .8s var(--ease), filter .8s var(--ease); transition-delay: var(--d, 0ms); will-change: opacity, transform, filter; }
+    .rv.in { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0px); }
+    .rv-kid { opacity: 0; transform: translate3d(0, 18px, 0); filter: blur(4px); transition: opacity .75s var(--ease), transform .75s var(--ease), filter .75s var(--ease); transition-delay: var(--kd, 0ms); }
+    .rv.in .rv-kid { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0px); }
+    .word { display: inline-block; opacity: 0; transform: translate3d(0, 18px, 0); filter: blur(7px); transition: opacity .7s var(--ease), transform .7s var(--ease), filter .7s var(--ease); transition-delay: var(--d, 0ms); }
+    .words-in .word { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0px); }
 
     /* ---------- Faixa emoldurada (padrão das seções) ---------- */
     .band { position: relative; }
-    .band-h { position: absolute; left: 0; right: 0; height: 1px; background: #E4E5E0; transform: scaleX(0); transition: transform 1.2s var(--ease); z-index: 1; }
-    .band-h.t { top: 0; } .band-h.b { bottom: 0; }
+    .band-h { position: absolute; left: 0; right: 0; height: 1px; background: #E4E5E0; transform: scaleX(0); transform-origin: center; transition: transform .85s var(--ease); z-index: 1; }
+    .band-h.t { top: 0; }
+    .band-h.b { bottom: 0; transition-delay: .18s; }
     .band-inner { position: relative; max-width: 1200px; margin: 0 16px; background: #EEF1EA; }
     @media (min-width: 1232px) { .band-inner { margin: 0 auto; } }
-    .band-v { position: absolute; top: 0; bottom: 0; width: 1px; background: #E4E5E0; transform: scaleY(0); transform-origin: top; transition: transform 1s var(--ease) .2s; z-index: 1; }
+    .band-v { position: absolute; top: 0; bottom: 0; width: 1px; background: #E4E5E0; transform: scaleY(0); transform-origin: top; transition: transform .85s var(--ease) .06s; z-index: 1; }
     .band-v.l { left: 0; } .band-v.r { right: 0; }
-    .mark { position: absolute; width: 7px; height: 7px; background: #F8F9F6; border: 1px solid #C9CCC4; opacity: 0; transform: scale(.3); transition: opacity .5s var(--ease) .8s, transform .5s var(--ease) .8s; z-index: 2; }
-    .mark.tl { top: -4px; left: -4px; } .mark.tr { top: -4px; right: -4px; } .mark.bl { bottom: -4px; left: -4px; } .mark.br { bottom: -4px; right: -4px; }
-    .band-body { position: relative; padding: 12px; opacity: 0; transform: translateY(18px); transition: opacity 1s var(--ease) .35s, transform 1s var(--ease) .35s; }
+    .mark { position: absolute; width: 7px; height: 7px; background: #F8F9F6; border: 1px solid #C9CCC4; opacity: 0; transform: scale(.3); transition: opacity .45s var(--ease), transform .45s var(--ease); z-index: 2; }
+    .mark.tl { top: -4px; left: -4px; transition-delay: .08s; }
+    .mark.tr { top: -4px; right: -4px; transition-delay: .08s; }
+    .mark.bl { bottom: -4px; left: -4px; transition-delay: .28s; }
+    .mark.br { bottom: -4px; right: -4px; transition-delay: .28s; }
+    .band-body { position: relative; padding: 12px; opacity: 0; transform: translate3d(0, 16px, 0); transition: opacity .75s var(--ease) .08s, transform .75s var(--ease) .08s; }
+    .band-item { opacity: 0; transform: translate3d(0, 20px, 0); transition: opacity .75s var(--ease), transform .75s var(--ease); transition-delay: calc(100ms + var(--i, 0) * 75ms); }
+    .band-ui { opacity: 0; transform: translate3d(0, 18px, 0) scale(.97); filter: blur(4px); transition: opacity .8s var(--ease), transform .8s var(--ease), filter .8s var(--ease); transition-delay: var(--ui-d, 260ms); }
     .band.in .band-h { transform: scaleX(1); }
     .band.in .band-v { transform: scaleY(1); }
     .band.in .mark { opacity: 1; transform: scale(1); }
-    .band.in .band-body { opacity: 1; transform: none; }
+    .band.in .band-body { opacity: 1; transform: translate3d(0, 0, 0); }
+    .band.in .band-item { opacity: 1; transform: translate3d(0, 0, 0); }
+    .band.in .band-item.hover-lift:hover { transform: translate3d(0, -4px, 0); transition-delay: 0ms; transition-duration: .4s; }
+    .band.in .band-ui { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0px); }
 
     /* ---------- Fotos ---------- */
     .ph { background-size: cover; background-position: center; }
-    .zoom { transform: scale(1.07); transition: transform 1.8s var(--ease) .3s; }
-    .band.in .zoom { transform: scale(1); }
+    .zoom { transform: translate3d(0, var(--py, 0px), 0) scale(1.09); transition: scale 1.4s var(--ease) .1s, transform 1.4s var(--ease) .1s; will-change: transform; }
+    .band.in .zoom { transform: translate3d(0, var(--py, 0px), 0) scale(1.03); }
+    .band.settled .zoom { transition: none; }
     .card-shadow { box-shadow: 0 1px 3px rgba(0,0,0,.05); }
     .ui-shadow { box-shadow: 0 14px 36px rgba(0,0,0,.14); }
 
@@ -90,19 +106,25 @@
     @keyframes marquee { to { transform: translateX(-50%); } }
 
     /* ---------- O que muda: foco no scroll ---------- */
-    .bf-row { transition: opacity .5s var(--ease); }
+    .bf-row { opacity: 0; transform: translate3d(0, 16px, 0); transition: opacity .65s var(--ease), transform .65s var(--ease); transition-delay: calc(120ms + var(--i, 0) * 70ms); }
+    .band.in .bf-row { opacity: 1; transform: translate3d(0, 0, 0); }
+    .band.settled .bf-row { transition-delay: 0ms; transition-duration: .45s; }
     .bf-title { display: inline-block; transition: transform .5s var(--ease); }
     .bf-row:hover .bf-title { transform: translateX(8px); }
-    @media (min-width: 768px) { .bf-focus .bf-row { opacity: .38; } .bf-focus .bf-row.on, .bf-focus .bf-row:hover { opacity: 1; } }
+    @media (min-width: 768px) {
+      .band.settled .bf-focus .bf-row { opacity: .38; }
+      .band.settled .bf-focus .bf-row.on,
+      .band.settled .bf-focus .bf-row:hover { opacity: 1; }
+    }
 
     /* ---------- Roadmap ---------- */
-    .rm-col { transform: scaleY(0); transform-origin: top; transition: transform 1s var(--ease); transition-delay: var(--d, 0ms); }
-    .rm-bar { transform: scaleX(0); transform-origin: left; transition: transform .9s var(--ease); transition-delay: var(--d, 0ms); }
-    .rm-bar > span { opacity: 0; transition: opacity .4s ease; transition-delay: calc(var(--d, 0ms) + 450ms); }
-    .rm-b { opacity: 0; transform: translateY(6px); transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc(var(--d, 0ms) + 550ms); }
-    .rm.in .rm-col { transform: scaleY(1); }
-    .rm.in .rm-bar { transform: scaleX(1); }
-    .rm.in .rm-bar > span, .rm.in .rm-b { opacity: 1; transform: none; }
+    .rm-col { transform: scaleY(0); transform-origin: top; transition: transform .85s var(--ease); transition-delay: var(--d, 0ms); }
+    .rm-bar { transform: scaleX(0); transform-origin: left; transition: transform .8s var(--ease); transition-delay: var(--d, 0ms); }
+    .rm-bar > span { opacity: 0; transition: opacity .4s ease; transition-delay: calc(var(--d, 0ms) + 320ms); }
+    .rm-b { opacity: 0; transform: translate3d(0, 8px, 0); transition: opacity .55s var(--ease), transform .55s var(--ease); transition-delay: calc(var(--d, 0ms) + 360ms); }
+    .band.in .rm-col, .rm.in .rm-col { transform: scaleY(1); }
+    .band.in .rm-bar, .rm.in .rm-bar { transform: scaleX(1); }
+    .band.in .rm-bar > span, .band.in .rm-b, .rm.in .rm-bar > span, .rm.in .rm-b { opacity: 1; transform: translate3d(0, 0, 0); }
     .rm-bar:hover { filter: brightness(1.06); }
     .here-dot { animation: pulse 2s ease-in-out infinite; }
     @keyframes pulse { 50% { box-shadow: 0 0 0 5px rgba(47,163,107,.18); } }
@@ -160,7 +182,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
-      .rv, .word, .band-body, .rm-b { opacity: 1 !important; transform: none !important; filter: none !important; }
+      .rv, .rv-kid, .word, .band-body, .band-item, .band-ui, .bf-row, .rm-b { opacity: 1 !important; transform: none !important; filter: none !important; }
       .band-h, .band-v, .rm-col, .rm-bar { transform: none !important; }
       .mark, .rm-bar > span { opacity: 1 !important; transform: none !important; }
       .zoom { transform: none !important; }
@@ -195,7 +217,7 @@
     <i class="mark tl"></i><i class="mark tr"></i><i class="mark bl"></i><i class="mark br"></i>
     <div id="ld-prog" class="absolute left-0 bottom-0 h-[2px] bg-ink" style="width:0%"></div>
   </div>
-  <div id="ld-win" class="ph" style="background-image:linear-gradient(rgba(6,27,49,.35),rgba(6,27,49,.35)),url('img/hero.jpg'),linear-gradient(135deg,#d9cfbf,#8e9a8b)"></div>
+  <div id="ld-win" class="ph" style="background-image:linear-gradient(rgba(6,27,49,.35),rgba(6,27,49,.35)),url('img/1.png'),linear-gradient(135deg,#d9cfbf,#8e9a8b)"></div>
   <div class="ld-center absolute left-0 right-0 flex flex-col items-center justify-center gap-3" style="top:calc(50% - 120px);height:240px">
     <div class="flex items-center gap-4">
       <span class="w-[46px] sm:w-[54px]"><svg class="logo-anim" viewBox="6 6 424 404" aria-hidden="true"><g class="la-lines" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" fill="none"><line x1="75" y1="67" x2="235" y2="24" pathLength="1"/><line x1="235" y1="24" x2="402" y2="109" pathLength="1"/><line x1="402" y1="109" x2="408" y2="188" pathLength="1"/><line x1="408" y1="188" x2="363" y2="319" pathLength="1"/><line x1="363" y1="319" x2="283" y2="348" pathLength="1"/><line x1="230" y1="324" x2="283" y2="348" pathLength="1"/><line x1="230" y1="324" x2="248" y2="390" pathLength="1"/><line x1="248" y1="390" x2="283" y2="348" pathLength="1"/><line x1="75" y1="67" x2="26" y2="155" pathLength="1"/><line x1="26" y1="155" x2="100" y2="238" pathLength="1"/><line x1="100" y1="238" x2="177" y2="256" pathLength="1"/><line x1="100" y1="238" x2="183" y2="195" pathLength="1"/><line x1="26" y1="155" x2="188" y2="146" pathLength="1"/><line x1="75" y1="67" x2="188" y2="146" pathLength="1"/><line x1="188" y1="146" x2="277" y2="143" pathLength="1"/><line x1="188" y1="146" x2="183" y2="195" pathLength="1"/><line x1="183" y1="195" x2="177" y2="256" pathLength="1"/><line x1="235" y1="24" x2="277" y2="143" pathLength="1"/><line x1="277" y1="143" x2="402" y2="109" pathLength="1"/><line x1="277" y1="143" x2="408" y2="188" pathLength="1"/><line x1="277" y1="143" x2="289" y2="229" pathLength="1"/><line x1="177" y1="256" x2="289" y2="229" pathLength="1"/><line x1="177" y1="256" x2="230" y2="324" pathLength="1"/><line x1="289" y1="229" x2="230" y2="324" pathLength="1"/><line x1="289" y1="229" x2="283" y2="348" pathLength="1"/><line x1="289" y1="229" x2="363" y2="319" pathLength="1"/></g><g class="la-dots" fill="currentColor"><circle cx="277" cy="143" r="19"/><circle cx="235" cy="24" r="15"/><circle cx="75" cy="67" r="15"/><circle cx="26" cy="155" r="15"/><circle cx="402" cy="109" r="14"/><circle cx="408" cy="188" r="15"/><circle cx="100" cy="238" r="14"/><circle cx="230" cy="324" r="14"/><circle cx="363" cy="319" r="15"/><circle cx="188" cy="146" r="13"/><circle cx="183" cy="195" r="13"/><circle cx="177" cy="256" r="11"/><circle cx="289" cy="229" r="13"/><circle cx="283" cy="348" r="12"/></g></svg></span>
@@ -267,8 +289,8 @@
       <i class="mark tl"></i><i class="mark tr"></i><i class="mark bl"></i><i class="mark br"></i>
       <div class="band-body grid lg:grid-cols-[1fr_324px] gap-3">
         <div class="relative h-[360px] sm:h-[424px] rounded-md overflow-hidden" role="img" aria-label="Mulher sentada no sofá escrevendo num caderno, em uma sala iluminada com plantas">
-          <div class="zoom ph absolute inset-0" style="background-image:url('img/hero.jpg'),linear-gradient(135deg,#ded3c3,#8e9a8b)"></div>
-          <div class="hero-rv rv absolute top-5 left-5 sm:top-7 sm:left-7 bg-white/90 backdrop-blur-xl rounded-md p-[18px] max-w-[276px]" style="--d:900ms">
+          <div class="zoom ph absolute inset-0" style="background-image:url('img/1.png'),linear-gradient(135deg,#ded3c3,#8e9a8b)"></div>
+          <div class="band-ui absolute top-5 left-5 sm:top-7 sm:left-7 bg-white/90 backdrop-blur-xl rounded-md p-[18px] max-w-[276px]" style="--ui-d:260ms">
             <span class="eyebrow !text-[11px] text-blue">Um espaço seguro</span>
             <p class="h-serif text-[24px] leading-[30px] mt-2">Do primeiro oi<br>à primeira sessão.</p>
             <p class="text-[14px] leading-5 text-muted mt-2">Escuta, acolhimento e ferramentas práticas, no seu ritmo.</p>
@@ -282,7 +304,7 @@
           <div class="space-y-6">
             <p class="h-serif text-[24px] leading-[31px]">“Encontrei o significado da minha vida dando significado na vida dos outros.”</p>
             <div class="flex items-center gap-2.5">
-              <span class="w-9 h-9 rounded-full ph" style="background-image:url('img/andre.jpg'),linear-gradient(135deg,#d1ccbd,#808c84)"></span>
+              <span class="w-9 h-9 rounded-full ph" style="background-image:url('img/perfil.jpg'),linear-gradient(135deg,#d1ccbd,#808c84)"></span>
               <span class="leading-tight"><span class="block text-[14px] font-medium">André Tedesco</span><span class="block text-[13px] text-white/60">Psicólogo clínico</span></span>
             </div>
           </div>
@@ -365,8 +387,8 @@
       <div class="band-body grid md:grid-cols-2 gap-2">
         <article class="bg-white rounded-md overflow-hidden card-shadow">
           <div class="relative h-[340px] sm:h-[420px] overflow-hidden" role="img" aria-label="Mãos segurando uma xícara de chá ao lado de um caderno aberto">
-            <div class="zoom ph absolute inset-0" style="background-image:url('img/cha.jpg'),linear-gradient(135deg,#e2d7c6,#9b8d79)"></div>
-            <div class="rv absolute right-4 bottom-4 sm:right-6 sm:bottom-6 w-[280px] sm:w-[300px] bg-white rounded-[10px] ui-shadow p-5 space-y-3" style="--d:300ms">
+            <div class="zoom ph absolute inset-0" style="background-image:url('img/2.png'),linear-gradient(135deg,#e2d7c6,#9b8d79)"></div>
+            <div class="band-ui absolute right-4 bottom-4 sm:right-6 sm:bottom-6 w-[280px] sm:w-[300px] bg-white rounded-[10px] ui-shadow p-5 space-y-3" style="--ui-d:260ms">
               <div class="flex items-center gap-2 text-[15px] font-medium"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Registro de pensamentos</div>
               <div><span class="inline-block px-2 py-0.5 rounded text-[12px] text-blue bg-blue/10">situação</span><p class="text-[15px] leading-[22px] text-[#333] mt-1.5">Reunião com a equipe amanhã.</p></div>
               <div><span class="inline-block px-2 py-0.5 rounded text-[12px] text-plum bg-plum/10">pensamento</span><p class="text-[15px] leading-[22px] text-[#333] mt-1.5">“Vão achar que não sei nada.”</p></div>
@@ -381,8 +403,8 @@
         </article>
         <article class="bg-white rounded-md overflow-hidden card-shadow">
           <div class="relative h-[340px] sm:h-[420px] overflow-hidden" role="img" aria-label="Homem caminhando tranquilo num parque arborizado ao entardecer">
-            <div class="zoom ph absolute inset-0" style="background-image:url('img/caminhada.jpg'),linear-gradient(135deg,#c9c9a8,#55654f)"></div>
-            <div class="rv absolute left-4 top-4 sm:left-6 sm:top-6 w-[270px] sm:w-[280px] bg-white rounded-[10px] ui-shadow px-[18px] pt-4 pb-2" style="--d:300ms">
+            <div class="zoom ph absolute inset-0" style="background-image:url('img/3.png'),linear-gradient(135deg,#c9c9a8,#55654f)"></div>
+            <div class="band-ui absolute left-4 top-4 sm:left-6 sm:top-6 w-[270px] sm:w-[280px] bg-white rounded-[10px] ui-shadow px-[18px] pt-4 pb-2" style="--ui-d:340ms">
               <div class="flex items-center gap-2 text-[15px] font-medium pb-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Combinados da semana</div>
               <div class="flex items-center gap-2.5 py-2.5 border-t border-line text-[14px]"><span class="w-[18px] h-[18px] rounded bg-moss grid place-items-center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Caminhar 20 minutos</div>
               <div class="flex items-center gap-2.5 py-2.5 border-t border-line text-[14px]"><span class="w-[18px] h-[18px] rounded bg-moss grid place-items-center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Anotar um pensamento por dia</div>
@@ -465,7 +487,7 @@
       <i class="mark tl"></i><i class="mark tr"></i><i class="mark bl"></i><i class="mark br"></i>
       <div class="band-body grid lg:grid-cols-[500px_1fr] gap-2">
         <div class="relative h-[420px] lg:h-auto lg:min-h-[560px] rounded-md overflow-hidden" role="img" aria-label="Retrato do psicólogo André Tedesco">
-          <div class="zoom ph absolute inset-0" style="background-image:url('img/andre.jpg'),linear-gradient(160deg,#d6d2c6,#7f8b84)"></div>
+          <div class="zoom ph absolute inset-0" style="background-image:url('img/4.png'),linear-gradient(160deg,#d6d2c6,#7f8b84)"></div>
         </div>
         <div class="flex flex-col gap-2">
           <div class="bg-white rounded card-shadow p-7 sm:p-8 flex-1 flex flex-col gap-[18px]">
@@ -478,7 +500,7 @@
               <span class="font-mono text-[11px] tracking-[.04em] px-2.5 py-1.5 rounded bg-soft">E-BOOK · INTELIGÊNCIA FITNESS</span>
             </div>
             <div class="flex items-center gap-3 pt-2 mt-auto">
-              <span class="w-10 h-10 rounded-full ph" style="background-image:url('img/andre.jpg'),linear-gradient(135deg,#d1ccbd,#808c84)"></span>
+              <span class="w-10 h-10 rounded-full ph" style="background-image:url('img/perfil.jpg'),linear-gradient(135deg,#d1ccbd,#808c84)"></span>
               <span class="leading-tight"><span class="block h-serif text-[18px]">André Tedesco</span><span class="block text-[13px] text-muted">Psicólogo clínico · CRP 06/000000</span></span>
             </div>
           </div>
@@ -519,9 +541,9 @@
           </div>
           <div class="relative bg-ink min-h-[460px] grid place-items-center p-6 overflow-hidden" style="background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:33px 33px">
             <span class="absolute w-[280px] h-[220px] rounded-full bg-[#F6C3A0]/15 blur-[90px] right-[-40px] bottom-[-40px]"></span>
-            <div class="rv relative w-full max-w-[440px] bg-white rounded-xl p-6 space-y-3.5" style="--d:200ms;box-shadow:0 18px 44px rgba(0,0,0,.35)">
+            <div class="band-ui relative w-full max-w-[440px] bg-white rounded-xl p-6 space-y-3.5" style="--ui-d:240ms;box-shadow:0 18px 44px rgba(0,0,0,.35)">
               <div class="flex items-center gap-[18px]">
-                <span class="w-[84px] h-[84px] rounded-full p-[3px] shrink-0" style="background:linear-gradient(45deg,#FBCC5E,#DE297A 55%,#8233B5)"><span class="block w-full h-full rounded-full p-[3px] bg-white"><span class="block w-full h-full rounded-full ph" style="background-image:url('img/andre.jpg'),linear-gradient(135deg,#d1ccbd,#808c84)"></span></span></span>
+                <span class="w-[84px] h-[84px] rounded-full p-[3px] shrink-0" style="background:linear-gradient(45deg,#FBCC5E,#DE297A 55%,#8233B5)"><span class="block w-full h-full rounded-full p-[3px] bg-white"><span class="block w-full h-full rounded-full ph" style="background-image:url('img/perfil.jpg'),linear-gradient(135deg,#d1ccbd,#808c84)"></span></span></span>
                 <span class="leading-tight"><span class="block text-[18px] font-semibold text-[#262626]">andrebtedesco</span><span class="block text-[14px] text-[#737373] mt-0.5">André Tedesco · Psicólogo</span></span>
               </div>
               <div class="flex justify-between text-center text-[#262626]">

@@ -1,7 +1,9 @@
 /* André Tedesco · Landing page
-   Animações em JS puro (sem bibliotecas). Respeita prefers-reduced-motion. */
+   Animações sincronizadas por seção + Smooth Scroll estilo Framer (JS puro).
+   Respeita prefers-reduced-motion. */
 (() => {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(pointer: fine)').matches;
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 
@@ -39,14 +41,14 @@
   if (rm) {
     const TOP = 56, W = 100 / 6;
     let html = '';
-    for (let i = 1; i < 6; i++) html += `<span class="rm-col absolute top-[${TOP}px] bottom-0 w-px bg-[#DCDED8]" style="left:${i * W}%;--d:${i * 70}ms"></span>`;
-    phases.forEach((p, i) => { html += `<span class="absolute top-6 font-mono text-[11px] tracking-[.05em] uppercase text-muted" style="left:calc(${i * W}% + 12px)">${p}</span>`; });
+    for (let i = 1; i < 6; i++) html += `<span class="rm-col absolute top-[${TOP}px] bottom-0 w-px bg-[#DCDED8]" style="left:${i * W}%;--d:${i * 55}ms"></span>`;
+    phases.forEach((p, i) => { html += `<span class="rm-b absolute top-6 font-mono text-[11px] tracking-[.05em] uppercase text-muted" style="left:calc(${i * W}% + 12px);--d:${i * 45}ms">${p}</span>`; });
     steps.forEach((s, i) => {
-      const d = 450 + i * 160;
+      const d = 160 + i * 105;
       html += `<div class="rm-bar absolute h-12 rounded-md flex items-center px-[22px] ${kindCls[s.kind]}" style="left:${s.col * W}%;width:${s.span * W}%;top:${TOP + s.y}px;--d:${d}ms"><span class="text-[15px] font-semibold whitespace-nowrap">${s.t}</span></div>`;
       html += `<ul class="rm-b absolute space-y-1.5 text-[13px] leading-[18px] text-muted" style="left:calc(${s.col * W}% + 22px);top:${TOP + s.y + 70}px;--d:${d}ms">${s.b.map((x) => `<li>${x}</li>`).join('')}</ul>`;
     });
-    html += `<span class="rm-b absolute inline-flex items-center gap-1.5 bg-white border border-ink/20 rounded px-2 py-1 font-mono text-[10px] tracking-[.05em]" style="left:22px;top:${TOP + 452 - 34}px;--d:1400ms"><span class="here-dot w-1.5 h-1.5 rounded-full bg-[#2FA36B]"></span>VOCÊ ESTÁ AQUI</span>`;
+    html += `<span class="rm-b absolute inline-flex items-center gap-1.5 bg-white border border-ink/20 rounded px-2 py-1 font-mono text-[10px] tracking-[.05em]" style="left:22px;top:${TOP + 452 - 34}px;--d:760ms"><span class="here-dot w-1.5 h-1.5 rounded-full bg-[#2FA36B]"></span>VOCÊ ESTÁ AQUI</span>`;
     rm.innerHTML = html;
   }
   const rmList = $('#roadmap-list');
@@ -55,7 +57,7 @@
     const phaseOf = [0, 2, 3, 4, 4, 5];
     rmList.innerHTML = order.map((i, k) => {
       const s = steps[i];
-      return `<li class="relative pl-8 pb-8 last:pb-0">
+      return `<li class="band-item relative pl-8 pb-8 last:pb-0" style="--i:${k}">
         ${k < order.length - 1 ? '<span class="absolute left-[7px] top-5 bottom-0 w-px bg-[#DCDED8]"></span>' : ''}
         <span class="absolute left-0 top-1.5 w-[15px] h-[15px] rounded ${s.kind === 'navy' ? 'bg-ink' : s.kind === 'blue' ? 'bg-blue' : 'bg-white border border-ink/25'}"></span>
         <span class="block font-mono text-[11px] tracking-[.05em] uppercase text-muted">${phases[phaseOf[i]]}</span>
@@ -72,25 +74,110 @@
     [...title.childNodes].forEach((node) => {
       if (node.nodeType !== Node.TEXT_NODE) return;
       const frag = document.createElement('span');
-      frag.innerHTML = node.textContent.split(' ').map((w) => (w ? `<span class="word" style="--d:${120 + (i++) * 55}ms">${w}</span>` : '')).join(' ');
+      frag.innerHTML = node.textContent.split(' ').map((w) => (w ? `<span class="word" style="--d:${80 + (i++) * 42}ms">${w}</span>` : '')).join(' ');
       node.replaceWith(...frag.childNodes);
     });
   }
 
-  /* ---------- Revelações no scroll ---------- */
+  /* ---------- Preparação de stagger alinhado por seção ---------- */
+  $$('.rv:not(.hero-rv)').forEach((rv) => {
+    const kids = [...rv.children];
+    if (kids.length > 1) {
+      kids.forEach((kid, idx) => {
+        kid.classList.add('rv-kid');
+        kid.style.setProperty('--kd', `${idx * 65}ms`);
+      });
+    }
+  });
+
+  $$('[data-band]').forEach((band) => {
+    const body = $('.band-body', band);
+    if (!body) return;
+
+    // Seção "O que muda": alinha pares horizontais (01+04, 02+05, 03+06)
+    const bfRowsInBand = $$('.bf-row', body);
+    if (bfRowsInBand.length) {
+      bfRowsInBand.forEach((row, idx) => {
+        row.style.setProperty('--i', String(idx % 3));
+      });
+      return;
+    }
+
+    // Seção FAQ: escalona as perguntas
+    const faqs = $$('.faq', body);
+    if (faqs.length) {
+      faqs.forEach((faq, idx) => {
+        faq.classList.add('band-item');
+        faq.style.setProperty('--i', String(idx));
+      });
+      return;
+    }
+
+    // Seção Roadmap: já possui animação própria sincronizada com .band.in
+    if ($('#roadmap', body)) return;
+
+    // Seção Sobre e Sigilo: possui coluna principal + sub-grid de cards
+    const children = [...body.children];
+    if (children.length === 2 && children[1].children.length >= 2 && !children[1].classList.contains('bg-ink')) {
+      children[0].classList.add('band-item');
+      children[0].style.setProperty('--i', '0');
+      let step = 1;
+      [...children[1].children].forEach((sub) => {
+        if (sub.classList.contains('grid')) {
+          [...sub.children].forEach((card) => {
+            card.classList.add('band-item');
+            card.style.setProperty('--i', String(step++));
+          });
+        } else {
+          sub.classList.add('band-item');
+          sub.style.setProperty('--i', String(step++));
+        }
+      });
+      return;
+    }
+
+    // Padrão (Hero band, O Problema, Por que a TCC, Instagram, CTA)
+    children.forEach((child, idx) => {
+      child.classList.add('band-item');
+      if (child.classList.contains('hover:-translate-y-1')) {
+        child.classList.add('hover-lift');
+      }
+      child.style.setProperty('--i', String(idx));
+    });
+  });
+
+  /* ---------- Revelações no scroll sincronizadas ---------- */
+  const activateBand = (band) => {
+    if (!band || band.classList.contains('in')) return;
+    band.classList.add('in');
+    $$('.rm', band).forEach((el) => el.classList.add('in'));
+    setTimeout(() => band.classList.add('settled'), reduced ? 0 : 1050);
+  };
+
   const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      if (el.hasAttribute('data-band')) {
+        activateBand(el);
+      } else {
+        el.classList.add('in');
+      }
+      io.unobserve(el);
+    });
+  }, { threshold: 0.02, rootMargin: '0px 0px -10% 0px' });
+
   const observeAll = () => {
-    $$('.rv:not(.hero-rv), .band:not([data-hero-band]), .rm').forEach((el) => io.observe(el));
+    $$('.rv:not(.hero-rv), .band:not([data-hero-band])').forEach((el) => io.observe(el));
   };
 
   const startPage = () => {
     document.body.classList.remove('loading');
     $$('.hero-rv').forEach((el) => el.classList.add('in'));
     if (title) title.classList.add('words-in');
-    setTimeout(() => $('[data-hero-band]')?.classList.add('in'), reduced ? 0 : 650);
+    setTimeout(() => activateBand($('[data-hero-band]')), reduced ? 0 : 320);
     observeAll();
+    onScrollFrame();
   };
 
   /* ---------- Navbar ---------- */
@@ -104,7 +191,7 @@
   });
   $$('#menu a').forEach((a) => a.addEventListener('click', () => { menu.classList.add('hidden'); menuBtn.setAttribute('aria-expanded', 'false'); }));
 
-  /* ---------- O que muda: a linha mais perto do centro fica em foco ---------- */
+  /* ---------- O que muda: foco alinhado por linha no scroll ---------- */
   const bfList = $('#bf-list');
   const bfRows = bfList ? $$('.bf-row', bfList) : [];
   const onScrollFocus = () => {
@@ -114,13 +201,15 @@
     const inZone = r.top < mid && r.bottom > mid;
     bfList.classList.toggle('bf-focus', inZone);
     if (!inZone) return;
-    let best = null, bestD = Infinity;
-    bfRows.forEach((row) => {
+    let bestD = Infinity;
+    const dists = bfRows.map((row) => {
       const rr = row.getBoundingClientRect();
       const d = Math.abs(rr.top + rr.height / 2 - mid);
-      if (d < bestD) { bestD = d; best = row; }
+      if (d < bestD) bestD = d;
+      return d;
     });
-    bfRows.forEach((row) => row.classList.toggle('on', row === best));
+    // Destaca os itens da mesma linha horizontal (ex: 01 e 04 juntos no desktop)
+    bfRows.forEach((row, idx) => row.classList.toggle('on', Math.abs(dists[idx] - bestD) < 18));
   };
 
   /* ---------- FAQ: uma aberta por vez ---------- */
@@ -139,22 +228,147 @@
   if (ctaEl) new IntersectionObserver(([e]) => { ctaVisible = e.isIntersecting; onScrollFab(); }, { threshold: 0.2 }).observe(ctaEl);
   function onScrollFab() { fab?.classList.toggle('show', window.scrollY > window.innerHeight * 0.9 && !ctaVisible); }
 
-  /* ---------- Marca d'água do CTA com parallax leve ---------- */
+  /* ---------- Parallax suave nas fotos e marca d'água do CTA ---------- */
   const ctaMark = $('#cta-mark');
+  const zoomEls = $$('.zoom');
   const onScrollParallax = () => {
-    if (!ctaMark || reduced) return;
-    const r = ctaMark.parentElement.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > window.innerHeight) return;
-    const p = (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight;
-    ctaMark.style.transform = `translateY(${p * 60}px) rotate(${p * -6}deg)`;
+    if (reduced) return;
+    const vh = window.innerHeight;
+    if (ctaMark) {
+      const r = ctaMark.parentElement.getBoundingClientRect();
+      if (r.bottom >= 0 && r.top <= vh) {
+        const p = (r.top + r.height / 2 - vh / 2) / vh;
+        ctaMark.style.transform = `translate3d(0, ${p * 56}px, 0) rotate(${p * -6}deg)`;
+      }
+    }
+    zoomEls.forEach((z) => {
+      const parent = z.parentElement;
+      if (!parent) return;
+      const r = parent.getBoundingClientRect();
+      if (r.bottom < -40 || r.top > vh + 40) return;
+      const p = (r.top + r.height / 2 - vh / 2) / vh;
+      z.style.setProperty('--py', `${(p * -18).toFixed(2)}px`);
+    });
   };
 
-  let ticking = false;
+  function onScrollFrame() {
+    onScrollNav();
+    onScrollFocus();
+    onScrollFab();
+    onScrollParallax();
+  }
+
+  /* ---------- Smooth Scroll estilo Framer (inércia suave + âncoras) ---------- */
+  let currentY = window.scrollY;
+  let targetY = window.scrollY;
+  let rafId = null;
+  let lastTime = 0;
+  let anchorAnim = null;
+
+  const getMaxScroll = () => Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+  const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+
+  const smoothStep = (now) => {
+    const dt = lastTime ? Math.min(64, now - lastTime) : 16.67;
+    lastTime = now;
+
+    if (anchorAnim) {
+      const elapsed = now - anchorAnim.start;
+      const t = clamp(elapsed / anchorAnim.duration, 0, 1);
+      const eased = easeOutQuart(t);
+      currentY = anchorAnim.from + (anchorAnim.to - anchorAnim.from) * eased;
+      targetY = currentY;
+      window.scrollTo(0, currentY);
+      onScrollFrame();
+      if (t < 1) {
+        rafId = requestAnimationFrame(smoothStep);
+      } else {
+        anchorAnim = null;
+        rafId = null;
+        lastTime = 0;
+      }
+      return;
+    }
+
+    targetY = clamp(targetY, 0, getMaxScroll());
+    const diff = targetY - currentY;
+
+    if (Math.abs(diff) > 0.15) {
+      // Amortecimento exponencial independente de FPS (sensação Framer/Lenis)
+      const alpha = 1 - Math.exp(-dt * 0.012);
+      currentY += diff * alpha;
+      window.scrollTo(0, currentY);
+      onScrollFrame();
+      rafId = requestAnimationFrame(smoothStep);
+    } else {
+      currentY = targetY;
+      window.scrollTo(0, targetY);
+      onScrollFrame();
+      rafId = null;
+      lastTime = 0;
+    }
+  };
+
+  const startSmoothLoop = () => {
+    if (!rafId) {
+      lastTime = performance.now();
+      rafId = requestAnimationFrame(smoothStep);
+    }
+  };
+
+  if (!reduced && finePointer) {
+    window.addEventListener('wheel', (e) => {
+      if (e.ctrlKey || e.metaKey || document.body.classList.contains('loading')) return;
+      e.preventDefault();
+      if (anchorAnim) anchorAnim = null;
+      if (!rafId) {
+        currentY = window.scrollY;
+        targetY = currentY;
+      }
+      let dy = e.deltaY;
+      if (e.deltaMode === 1) dy *= 16;
+      else if (e.deltaMode === 2) dy *= window.innerHeight;
+      targetY = clamp(targetY + dy, 0, getMaxScroll());
+      startSmoothLoop();
+    }, { passive: false });
+  }
+
+  // Navegação suave nas âncoras (#abordagem, #como-funciona, #sobre, #sigilo, #faq, #topo)
+  $$('a[href^="#"]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const hash = link.getAttribute('href');
+      if (!hash || hash === '#') return;
+      const targetEl = $(hash);
+      if (!targetEl) return;
+      e.preventDefault();
+      const offset = hash === '#topo' ? 0 : 80;
+      const dest = clamp(targetEl.getBoundingClientRect().top + window.scrollY - offset, 0, getMaxScroll());
+      history.pushState(null, '', hash);
+      if (reduced) {
+        window.scrollTo(0, dest);
+        currentY = targetY = dest;
+        onScrollFrame();
+        return;
+      }
+      currentY = window.scrollY;
+      targetY = dest;
+      anchorAnim = { from: currentY, to: dest, start: performance.now(), duration: 820 };
+      startSmoothLoop();
+    });
+  });
+
+  // Mantém sincronizado caso o usuário role pela barra de rolagem, teclado ou touch
+  let scrollTick = false;
   window.addEventListener('scroll', () => {
-    if (ticking) return; ticking = true;
-    requestAnimationFrame(() => { onScrollNav(); onScrollFocus(); onScrollFab(); onScrollParallax(); ticking = false; });
+    if (!rafId) {
+      currentY = window.scrollY;
+      targetY = currentY;
+    }
+    if (scrollTick || rafId) return;
+    scrollTick = true;
+    requestAnimationFrame(() => { onScrollFrame(); scrollTick = false; });
   }, { passive: true });
-  onScrollNav();
 
   const y = $('#year'); if (y) y.textContent = new Date().getFullYear();
 
