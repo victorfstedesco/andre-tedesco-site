@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>André Tedesco · Psicólogo clínico · Terapia Cognitivo-Comportamental</title>
-  <meta name="description" content="Psicoterapia para adolescentes e adultos com a Terapia Cognitivo-Comportamental. Psicólogo André Tedesco, CRP 06/000000. Agende sua primeira conversa pelo WhatsApp.">
+  <meta name="description" content="Psicoterapia para adolescentes e adultos com a Terapia Cognitivo-Comportamental. Psicólogo André Tedesco, CRP 06/158300. Agende sua primeira conversa pelo WhatsApp.">
   <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -148,7 +148,14 @@
     .nav-link::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .4s var(--ease); }
     .nav-link:hover::after { transform: scaleX(1); }
 
-    /* ---------- Instagram link ---------- */
+    /* ---------- Livros ---------- */
+    .book { height: auto; box-shadow: 0 18px 44px rgba(0,0,0,.45); outline: 1px solid rgba(255,255,255,.14); outline-offset: -1px; transition: transform .6s var(--ease); }
+    .book-a { position: relative; z-index: 1; transform: rotate(-5deg) translateY(10px); }
+    .book-b { position: relative; z-index: 2; transform: rotate(4deg) translateY(-10px); }
+    .book-stack:hover .book-a, .book-stack:focus-visible .book-a { transform: rotate(-7deg) translate(-10px, 8px); }
+    .book-stack:hover .book-b, .book-stack:focus-visible .book-b { transform: rotate(5deg) translate(10px, -14px); }
+
+    /* ---------- Links com ícone (Instagram e Livros) ---------- */
     .ig-link .ig-ico { transition: transform .45s var(--ease); }
     .ig-link:hover .ig-ico { transform: scale(1.06); }
     .ig-link .ig-arr svg { transition: transform .45s var(--ease); }
@@ -199,6 +206,7 @@
   <symbol id="logo" viewBox="6 6 424 404"><g stroke="currentColor" stroke-width="5.5" stroke-linecap="round"><line x1="75" y1="67" x2="235" y2="24" pathLength="1"/><line x1="235" y1="24" x2="402" y2="109" pathLength="1"/><line x1="402" y1="109" x2="408" y2="188" pathLength="1"/><line x1="408" y1="188" x2="363" y2="319" pathLength="1"/><line x1="363" y1="319" x2="283" y2="348" pathLength="1"/><line x1="230" y1="324" x2="283" y2="348" pathLength="1"/><line x1="230" y1="324" x2="248" y2="390" pathLength="1"/><line x1="248" y1="390" x2="283" y2="348" pathLength="1"/><line x1="75" y1="67" x2="26" y2="155" pathLength="1"/><line x1="26" y1="155" x2="100" y2="238" pathLength="1"/><line x1="100" y1="238" x2="177" y2="256" pathLength="1"/><line x1="100" y1="238" x2="183" y2="195" pathLength="1"/><line x1="26" y1="155" x2="188" y2="146" pathLength="1"/><line x1="75" y1="67" x2="188" y2="146" pathLength="1"/><line x1="188" y1="146" x2="277" y2="143" pathLength="1"/><line x1="188" y1="146" x2="183" y2="195" pathLength="1"/><line x1="183" y1="195" x2="177" y2="256" pathLength="1"/><line x1="235" y1="24" x2="277" y2="143" pathLength="1"/><line x1="277" y1="143" x2="402" y2="109" pathLength="1"/><line x1="277" y1="143" x2="408" y2="188" pathLength="1"/><line x1="277" y1="143" x2="289" y2="229" pathLength="1"/><line x1="177" y1="256" x2="289" y2="229" pathLength="1"/><line x1="177" y1="256" x2="230" y2="324" pathLength="1"/><line x1="289" y1="229" x2="230" y2="324" pathLength="1"/><line x1="289" y1="229" x2="283" y2="348" pathLength="1"/><line x1="289" y1="229" x2="363" y2="319" pathLength="1"/></g><g fill="currentColor"><circle cx="277" cy="143" r="19"/><circle cx="235" cy="24" r="15"/><circle cx="75" cy="67" r="15"/><circle cx="26" cy="155" r="15"/><circle cx="402" cy="109" r="14"/><circle cx="408" cy="188" r="15"/><circle cx="100" cy="238" r="14"/><circle cx="230" cy="324" r="14"/><circle cx="363" cy="319" r="15"/><circle cx="188" cy="146" r="13"/><circle cx="183" cy="195" r="13"/><circle cx="177" cy="256" r="11"/><circle cx="289" cy="229" r="13"/><circle cx="283" cy="348" r="12"/></g></symbol>
   <symbol id="arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="whatsapp" viewBox="0 0 24 24"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35M12.05 21.5h-.01a9.4 9.4 0 0 1-4.8-1.32l-.34-.2-3.57.94.95-3.48-.22-.36a9.4 9.4 0 0 1-1.44-5.02c0-5.2 4.23-9.43 9.44-9.43 2.52 0 4.89.98 6.67 2.77a9.37 9.37 0 0 1 2.76 6.67c0 5.2-4.24 9.43-9.44 9.43M20.08 3.9A11.29 11.29 0 0 0 12.05.57C5.8.57.7 5.66.7 11.92c0 2 .52 3.95 1.52 5.67L.6 23.43l5.96-1.56a11.3 11.3 0 0 0 5.48 1.4h.01c6.25 0 11.34-5.09 11.35-11.35 0-3.03-1.18-5.88-3.32-8.02"/></symbol>
+  <symbol id="book" viewBox="0 0 24 24"><path d="M12 7v13M12 7c-1.6-1.6-4-2.5-8-2.5v14c4 0 6.4.9 8 1.5 1.6-.6 4-1.5 8-1.5v-14c-4 0-6.4.9-8 2.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="instagram" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></g></symbol>
 </svg>
 
@@ -227,7 +235,7 @@
     <span class="ld-name eyebrow !text-[10px] sm:!text-[11px] opacity-70 text-center px-4">Psicólogo clínico · Terapia Cognitivo-Comportamental</span>
   </div>
   <div class="ld-meta">
-    <span class="eyebrow !text-[11px] text-muted absolute top-10" style="left:var(--m)">André Tedesco · CRP 06/000000</span>
+    <span class="eyebrow !text-[11px] text-muted absolute top-10" style="left:var(--m)">André Tedesco · CRP 06/158300</span>
     <span class="eyebrow !text-[11px] text-muted absolute top-10 hidden sm:block" style="right:var(--m)">São Paulo · 2026</span>
     <span id="ld-phrase" class="ld-phrase h-serif text-[18px] sm:text-[20px] absolute bottom-10" style="left:var(--m)">Respire fundo.</span>
     <div class="absolute bottom-9 text-right" style="right:var(--m)">
@@ -273,7 +281,7 @@
 <!-- ============ 01 HERO ============ -->
 <section class="pt-[140px] sm:pt-[168px]">
   <div class="flex flex-col items-center text-center gap-6 px-4 pb-16">
-    <span class="hero-rv rv inline-flex px-2.5 py-1 rounded bg-ink text-white/95 font-mono text-[11px] tracking-[.06em]" style="--d:0ms">PSICÓLOGO CLÍNICO · CRP 06/000000</span>
+    <span class="hero-rv rv inline-flex px-2.5 py-1 rounded bg-ink text-white/95 font-mono text-[11px] tracking-[.06em]" style="--d:0ms">PSICÓLOGO CLÍNICO · CRP 06/158300</span>
     <h1 id="hero-title" class="h-serif text-[40px] leading-[46px] sm:text-[56px] sm:leading-[64px] max-w-[900px]">Entenda o que você sente<br class="hidden sm:block"> e mude o que não funciona mais</h1>
     <p class="hero-rv rv text-muted text-[17px] sm:text-[18px] leading-7 max-w-[640px]" style="--d:500ms">Psicoterapia para adolescentes e adultos com a Terapia Cognitivo-Comportamental, uma abordagem prática, acolhedora e baseada em evidências.</p>
     <div class="hero-rv rv flex flex-wrap justify-center gap-2.5 pt-2" style="--d:620ms">
@@ -493,22 +501,54 @@
         <div class="flex flex-col gap-2">
           <div class="bg-white rounded card-shadow p-7 sm:p-8 flex-1 flex flex-col gap-[18px]">
             <p class="h-serif text-[24px] leading-[32px] sm:text-[26px] sm:leading-[34px]">“Encontrei o significado da minha vida dando significado na vida dos outros.”</p>
-            <p class="text-[16px] leading-[25px] text-muted">Sou psicólogo clínico e atendo adolescentes e adultos com a Terapia Cognitivo-Comportamental. Minha missão é oferecer ferramentas de autoconhecimento, gestão emocional e alta performance para a vida pessoal e profissional.</p>
-            <p class="text-[16px] leading-[25px] text-muted">Fora do consultório, o esporte sempre fez parte da minha vida: fui atleta de futebol, lutei Muay Thai e treino musculação desde 2018.</p>
-            <div class="flex flex-wrap gap-2 pt-1">
-              <span class="font-mono text-[11px] tracking-[.04em] px-2.5 py-1.5 rounded bg-soft">LIVRO · PODER DOS 5 AUTOS</span>
-              <span class="font-mono text-[11px] tracking-[.04em] px-2.5 py-1.5 rounded bg-soft">E-BOOK · PENSAR EM QUÊ</span>
-              <span class="font-mono text-[11px] tracking-[.04em] px-2.5 py-1.5 rounded bg-soft">E-BOOK · INTELIGÊNCIA FITNESS</span>
-            </div>
-            <div class="flex items-center gap-3 pt-2 mt-auto">
-              <span class="w-10 h-10 rounded-full ph" style="background-image:url('img/perfil.jpg'),linear-gradient(135deg,#d1ccbd,#808c84)"></span>
-              <span class="leading-tight"><span class="block h-serif text-[18px]">André Tedesco</span><span class="block text-[13px] text-muted">Psicólogo clínico · CRP 06/000000</span></span>
-            </div>
+            <p class="text-[16px] leading-[25px] text-muted">Sou Psicólogo Clínico, pós-graduado em Terapia Cognitivo-Comportamental pela PUCRS (2022) e pós-graduado em Neurociência, Psicologia Positiva e Mindfulness pela PUCPR (2024).</p>
+            <p class="text-[16px] leading-[25px] text-muted">Sou autor do livro <a href="https://uiclap.bio/andrebtedesco" target="_blank" rel="noopener" class="font-bold text-ink underline underline-offset-2 hover:text-blue transition-colors">O Poder dos 5 Autos: Autoconhecimento, Autocontrole, Autoestima, Autoconfiança e Autoperformance</a> (2022). E, também, do livro <a href="https://uiclap.bio/andrebtedesco" target="_blank" rel="noopener" class="font-bold text-ink underline underline-offset-2 hover:text-blue transition-colors">Poder dos 12 Autos</a>, publicado pela Editora Uiclap em 2024. Além disso, sou autor independente de três livros digitais: <a href="https://uiclap.bio/andrebtedesco" target="_blank" rel="noopener" class="font-bold text-ink underline underline-offset-2 hover:text-blue transition-colors">Pensar em Quê: Qual é o Seu Motivo para a Ação?</a>; <a href="https://uiclap.bio/andrebtedesco" target="_blank" rel="noopener" class="font-bold text-ink underline underline-offset-2 hover:text-blue transition-colors">Inteligência Fitness: Como Transformar Sua Mentalidade Criando um Hábito Fitness</a>; e <a href="https://uiclap.bio/andrebtedesco" target="_blank" rel="noopener" class="font-bold text-ink underline underline-offset-2 hover:text-blue transition-colors">Como Ter uma Vida Mais Saudável</a>.</p>
+            <p class="text-[16px] leading-[25px] text-muted">Minha missão é promover conteúdos e ferramentas voltados para alta performance, gestão emocional e autoconhecimento, auxiliando pessoas a alcançarem melhores resultados em suas vidas pessoais e profissionais.</p>
+            <p class="text-[16px] leading-[25px] text-muted">Sou apaixonado pelo esporte. Na adolescência, fui atleta de futebol e pratiquei artes marciais, incluindo Muay Thai. Desde 2018, mantenho a disciplina de exercícios físicos como parte do meu estilo de vida.</p>
+            <p class="text-[16px] leading-[25px] text-muted">Também sou praticante de Mindfulness (Atenção Plena). Encontrei na Psicologia e no esporte importantes fontes de foco, bem-estar, felicidade e alta performance, princípios que procuro transmitir diariamente em minha atuação profissional.</p>
+            <p class="text-[16px] leading-[25px] text-muted">Já ultrapassei mais de 10.000 atendimentos desde Fevereiro de 2020.</p>
           </div>
           <div class="grid sm:grid-cols-3 gap-2">
             <div class="bg-white rounded card-shadow p-[18px]"><span class="eyebrow !text-[12px] text-blue">PUCRS</span><p class="text-[15px] font-medium mt-1">Pós em TCC</p></div>
             <div class="bg-white rounded card-shadow p-[18px]"><span class="eyebrow !text-[12px] text-moss">PUCPR</span><p class="text-[15px] font-medium mt-1">Neurociência e Mindfulness</p></div>
             <div class="bg-white rounded card-shadow p-[18px]"><span class="eyebrow !text-[12px] text-clay">Uiclap</span><p class="text-[15px] font-medium mt-1">Autor Top Seller</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05a LIVROS ============ -->
+<section id="livros" class="pb-[140px] scroll-mt-20">
+  <div class="rv flex flex-col items-center text-center gap-4 px-4 mb-12">
+    <span class="eyebrow text-clay">Autoria</span>
+    <h2 class="h-serif text-[34px] leading-[42px] sm:text-[42px] sm:leading-[52px]">Autoconhecimento que<br>também virou livro</h2>
+  </div>
+  <div class="band" data-band>
+    <span class="band-h t"></span><span class="band-h b"></span>
+    <div class="band-inner">
+      <span class="band-v l"></span><span class="band-v r"></span>
+      <i class="mark tl"></i><i class="mark tr"></i><i class="mark bl"></i><i class="mark br"></i>
+      <div class="band-body">
+        <div class="grid lg:grid-cols-2 rounded-md overflow-hidden card-shadow">
+          <div class="bg-white p-7 sm:p-14 flex flex-col justify-center gap-[18px]">
+            <p class="text-[16px] leading-6 text-muted max-w-[440px]">Em Poder dos 5 Autos e Poder dos 12 Autos, o André escreve sobre autoconhecimento, autocontrole, autoestima e alta performance.</p>
+            <p class="text-[16px] leading-6 text-muted max-w-[440px]">Os títulos, junto com os cadernos e o planner da coleção, estão reunidos na página dele na Uiclap.</p>
+            <a class="ig-link flex items-center justify-between gap-3.5 p-3 pl-3.5 rounded-lg bg-white border border-line max-w-[440px] transition-colors" href="https://uiclap.bio/andrebtedesco" target="_blank" rel="noopener">
+              <span class="flex items-center gap-3">
+                <span class="ig-ico w-10 h-10 rounded-[10px] grid place-items-center text-white bg-clay shrink-0"><svg class="w-5 h-5"><use href="#book"/></svg></span>
+                <span class="leading-tight"><span class="block text-[16px] font-medium">Livros do André</span><span class="block text-[13px] text-muted">Abrir na Uiclap</span></span>
+              </span>
+              <span class="ig-arr w-9 h-9 rounded-md bg-ink text-white grid place-items-center shrink-0"><svg class="w-4 h-4"><use href="#arrow"/></svg></span>
+            </a>
+          </div>
+          <div class="relative bg-ink min-h-[460px] grid place-items-center p-6 overflow-hidden lg:order-first" style="background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:33px 33px">
+            <span class="absolute w-[340px] h-[280px] rounded-full bg-[#F6C3A0]/20 blur-[90px] left-[-40px] top-[-40px]"></span>
+            <a class="book-stack band-ui relative flex justify-center items-center w-full max-w-[440px]" style="--ui-d:240ms" href="https://uiclap.bio/andrebtedesco" target="_blank" rel="noopener" aria-label="Ver os livros do André na Uiclap">
+              <img class="book book-a w-[46%] max-w-[200px] rounded-[3px]" src="img/livro-5-autos.jpg" width="545" height="800" loading="lazy" alt="Capa do livro Poder dos 5 Autos, de André Tedesco">
+              <img class="book book-b w-[46%] max-w-[200px] rounded-[3px] -ml-[2%]" src="img/livro-12-autos.jpg" width="545" height="800" loading="lazy" alt="Capa do livro Poder dos 12 Autos, de André Tedesco">
+            </a>
           </div>
         </div>
       </div>
@@ -552,7 +592,7 @@
                 <span><b class="block text-[16px] font-semibold">00 mil</b><span class="text-[13px] text-[#737373]">seguidores</span></span>
                 <span><b class="block text-[16px] font-semibold">000</b><span class="text-[13px] text-[#737373]">seguindo</span></span>
               </div>
-              <p class="text-[14px] leading-5 text-[#262626]">Psicólogo clínico · TCC · CRP 06/000000<br>Autoconhecimento, gestão emocional e alta performance.</p>
+              <p class="text-[14px] leading-5 text-[#262626]">Psicólogo clínico · TCC · CRP 06/158300<br>Autoconhecimento, gestão emocional e alta performance.</p>
               <div class="grid grid-cols-2 gap-2">
                 <a href="https://www.instagram.com/andrebtedesco/" target="_blank" rel="noopener" class="text-center text-[14px] font-semibold py-2 rounded-lg bg-[#0095F6] text-white hover:bg-[#1877F2] transition-colors">Seguir</a>
                 <a href="https://www.instagram.com/andrebtedesco/" target="_blank" rel="noopener" class="text-center text-[14px] font-semibold py-2 rounded-lg bg-[#EFEFEF] text-[#262626] hover:bg-[#E3E3E3] transition-colors">Enviar mensagem</a>
@@ -667,7 +707,7 @@
   <div class="max-w-frame mx-4 xl:mx-auto flex flex-col md:flex-row justify-between gap-10 pb-10">
     <div class="space-y-2.5">
       <div class="flex items-center gap-2.5"><svg class="w-[34px] h-[32px] text-ink"><use href="#logo"/></svg><span class="h-serif text-[24px]">André Tedesco</span></div>
-      <p class="text-[14px] font-medium text-muted">Psicólogo clínico · CRP 06/000000</p>
+      <p class="text-[14px] font-medium text-muted">Psicólogo clínico · CRP 06/158300</p>
       <p class="text-[14px] leading-[21px] text-muted">Terapia Cognitivo-Comportamental para<br>adolescentes e adultos.</p>
     </div>
     <div class="flex gap-14 sm:gap-20 text-[15px]">
